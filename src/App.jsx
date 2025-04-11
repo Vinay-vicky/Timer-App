@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import Timer from "./components/Timer";
 import TimerControls from "./components/TimerControls";
 import SetTimePanel from "./components/SetTimePanel";
-import {
-  decrementTime,
-  getNewInitialTime,
-} from "./components/utils/utilities";
+import { decrementTime, getNewInitialTime } from "./components/Utilities";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {

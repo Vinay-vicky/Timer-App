@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { getTotalSeconds } from "./utils/utilities";
+import { getTotalSeconds } from "./Utilities";
 
 const Timer = ({
   sessionTime,
