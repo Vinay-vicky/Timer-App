@@ -6,7 +6,7 @@ import { decrementTime, getNewInitialTime } from "./components/Utilities";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-  const [initialSession, setInitialSession] = useState("35:00");
+  const [initialSession, setInitialSession] = useState("25:00");
   const [sessionTime, setSessionTime] = useState(initialSession);
   const [initialBreak, setInitialBreak] = useState("05:00");
   const [breakTime, setBreakTime] = useState(initialBreak);
