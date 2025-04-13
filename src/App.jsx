@@ -15,7 +15,7 @@ const App = () => {
 
   // PWA installation state
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showInstallBtn, setShowInstallBtn] = useState(false);
+  const [showInstall, setShowInstall] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,22 +52,19 @@ const App = () => {
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setShowInstallBtn(true);
+      setShowInstall(true);
     });
   }, []);
 
-  const handleInstallClick = () => {
+  const handleInstallClick = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === "accepted") {
-          console.log("App installed");
-        } else {
-          console.log("App installation rejected");
-        }
-        setDeferredPrompt(null);
-        setShowInstallBtn(false);
-      });
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        console.log("App installed");
+      }
+      setDeferredPrompt(null);
+      setShowInstall(false);
     }
   };
 
@@ -121,12 +118,10 @@ const App = () => {
       </main>
 
       {/* Install App Button */}
-      {showInstallBtn && (
-        <div className="text-center my-4">
-          <button className="btn btn-success" onClick={handleInstallClick}>
-            Install App
-          </button>
-        </div>
+      {showInstall && (
+        <button onClick={handleInstallClick} className="btn btn-primary mt-3">
+          Install App
+        </button>
       )}
 
       <style>{`
