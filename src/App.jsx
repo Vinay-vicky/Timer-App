@@ -6,7 +6,6 @@ import { decrementTime, getNewInitialTime } from "./components/Utilities";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-  // Timer States
   const [initialSession, setInitialSession] = useState("25:00");
   const [sessionTime, setSessionTime] = useState(initialSession);
   const [initialBreak, setInitialBreak] = useState("05:00");
@@ -14,11 +13,10 @@ const App = () => {
   const [timerOn, setTimerOn] = useState(false);
   const [isBreakTime, setIsBreakTime] = useState(false);
 
-  // PWA Install Prompt States
+  // PWA installation state
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallBtn, setShowInstallBtn] = useState(false);
 
-  // Timer Countdown Logic
   useEffect(() => {
     const interval = setInterval(() => {
       if (timerOn) {
@@ -30,7 +28,6 @@ const App = () => {
     return () => clearInterval(interval);
   }, [isBreakTime, timerOn]);
 
-  // Timer End Logic
   useEffect(() => {
     if (sessionTime === "00:00") {
       const audio = new Audio(
@@ -50,19 +47,13 @@ const App = () => {
     }
   }, [sessionTime, breakTime]);
 
-  // PWA Install Prompt Setup
+  // Handle PWA install prompt
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e) => {
+    window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstallBtn(true);
-    };
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    };
+    });
   }, []);
 
   const handleInstallClick = () => {
@@ -80,7 +71,6 @@ const App = () => {
     }
   };
 
-  // Time Adjustment
   const setInitialTime = (forSession, change) => {
     const update = (prev) => getNewInitialTime(prev, change);
     if (forSession) {
@@ -92,7 +82,6 @@ const App = () => {
     }
   };
 
-  // Reset Handler
   const handleReset = () => {
     setTimerOn(false);
     setIsBreakTime(false);
@@ -129,16 +118,16 @@ const App = () => {
           setInitialTime={setInitialTime}
           timerOn={timerOn}
         />
-
-        {/* PWA Install Button */}
-        {showInstallBtn && (
-          <div className="text-center mt-4">
-            <button className="btn btn-success" onClick={handleInstallClick}>
-              Install App
-            </button>
-          </div>
-        )}
       </main>
+
+      {/* Install App Button */}
+      {showInstallBtn && (
+        <div className="text-center my-4">
+          <button className="btn btn-success" onClick={handleInstallClick}>
+            Install App
+          </button>
+        </div>
+      )}
 
       <style>{`
         .app-wrapper {
