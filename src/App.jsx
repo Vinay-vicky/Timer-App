@@ -13,7 +13,7 @@ const App = () => {
   const [timerOn, setTimerOn] = useState(false);
   const [isBreakTime, setIsBreakTime] = useState(false);
 
-  // PWA installation state
+  // Install App button logic
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstall, setShowInstall] = useState(false);
 
@@ -47,13 +47,18 @@ const App = () => {
     }
   }, [sessionTime, breakTime]);
 
-  // Handle PWA install prompt
   useEffect(() => {
-    window.addEventListener("beforeinstallprompt", (e) => {
+    const handler = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstall(true);
-    });
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
   }, []);
 
   const handleInstallClick = async () => {
@@ -89,7 +94,6 @@ const App = () => {
   return (
     <div className="container py-4 app-wrapper" id="app-container">
       <main className="pt-5 mt-4">
-        {/* Timer */}
         <div className="d-flex justify-content-center my-4">
           <Timer
             initialSession={initialSession}
@@ -101,14 +105,12 @@ const App = () => {
           />
         </div>
 
-        {/* Controls */}
         <TimerControls
           timerOn={timerOn}
           setTimerOn={setTimerOn}
           handleReset={handleReset}
         />
 
-        {/* Session & Break Lengths */}
         <SetTimePanel
           initialSession={initialSession}
           initialBreak={initialBreak}
@@ -119,9 +121,11 @@ const App = () => {
 
       {/* Install App Button */}
       {showInstall && (
-        <button onClick={handleInstallClick} className="btn btn-primary mt-3">
-          Install App
-        </button>
+        <div className="text-center my-4">
+          <button className="btn btn-success" onClick={handleInstallClick}>
+            Install App
+          </button>
+        </div>
       )}
 
       <style>{`
@@ -147,7 +151,6 @@ const App = () => {
 };
 
 export default App;
-
 
 
 
